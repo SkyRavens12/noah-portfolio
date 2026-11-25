@@ -1,0 +1,342 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-page-bg: #f8f8f8;
+    --color-peach: #ffdab9;
+    --color-peach-soft: rgba(255, 218, 185, 0.4);
+    --color-status-green: rgba(152, 251, 152, 0.3);
+    --color-footer-bg: #f5fae1;
+    --color-ink: #333333;
+    --color-muted: #888888;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        background-color: #f8f8f8;
+        font-family: var(--font-sans);
+    }
+
+    body {
+        background-color: #f8f8f8;
+        color: #333333;
+    }
+
+    body.is-loading {
+        overflow: hidden;
+    }
+}
+
+/* Branded Loading Screen */
+.loader-overlay {
+    transition:
+        transform 780ms cubic-bezier(0.76, 0, 0.24, 1),
+        border-radius 780ms cubic-bezier(0.76, 0, 0.24, 1);
+    will-change: transform;
+}
+
+.loader-overlay.is-exiting {
+    transform: translate3d(0, -104%, 0);
+    border-bottom-left-radius: 36px;
+    border-bottom-right-radius: 36px;
+}
+
+.loader-overlay.is-exiting #loader-content {
+    opacity: 0;
+    transform: translate3d(0, -24px, 0) scale(0.97);
+}
+
+@keyframes loaderFadeUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes loaderTextRise {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes loaderSpinSlow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loaderOrbFloat {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+        transform: translate3d(0, -14px, 0) scale(1.04);
+    }
+}
+
+.loader-fade-up {
+    animation: loaderFadeUp 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--loader-delay, 0ms);
+}
+
+.loader-text-rise {
+    animation: loaderTextRise 700ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
+}
+
+.loader-spin-slow {
+    animation: loaderSpinSlow 10s linear infinite;
+}
+
+.loader-spin-reverse {
+    animation: loaderSpinSlow 18s linear infinite reverse;
+}
+
+@keyframes loaderPulseRing {
+    0%, 100% {
+        transform: scale(0.95);
+        opacity: 0.45;
+    }
+    50% {
+        transform: scale(1.06);
+        opacity: 0.9;
+    }
+}
+
+.loader-pulse-ring {
+    animation: loaderPulseRing 2.6s ease-in-out infinite;
+}
+
+@keyframes loaderFloatCard {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0) scale(0.94);
+    }
+    18% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    58% {
+        opacity: 1;
+        transform: translate3d(0, -10px, 0) scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+.loader-float-card {
+    animation: loaderFloatCard 4.2s ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
+    animation-fill-mode: backwards;
+}
+
+.loader-overlay.is-exiting .loader-float-card {
+    opacity: 0;
+    transform: translate3d(0, -24px, 0) scale(0.92);
+    transition: opacity 420ms ease-out, transform 420ms ease-out;
+}
+
+.loader-ring-bob {
+    animation: gentleFloat 2s ease-in-out infinite;
+}
+
+.loader-orb {
+    animation: loaderOrbFloat 5.5s ease-in-out infinite;
+}
+
+.loader-orb-delayed {
+    animation: loaderOrbFloat 6.5s ease-in-out 0.8s infinite;
+}
+
+/* Scroll-reveal base states */
+[data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0);
+    transition:
+        opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+[data-reveal="left"] {
+    transform: translate3d(-28px, 0, 0);
+}
+
+[data-reveal="right"] {
+    transform: translate3d(28px, 0, 0);
+}
+
+[data-reveal="scale"] {
+    transform: translate3d(0, 20px, 0) scale(0.95);
+}
+
+[data-reveal="pop"] {
+    transform: scale(0.75);
+}
+
+[data-reveal].is-revealed {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Nav click target arrival polish */
+@keyframes sectionArrive {
+    0% {
+        opacity: 0.65;
+        transform: translate3d(0, 16px, 0) scale(0.994);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+.section-arrive {
+    animation: sectionArrive 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Subtle floating cue on the scroll-down arrow */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(4px);
+    }
+}
+
+.animate-gentle-float {
+    animation: gentleFloat 2.2s ease-in-out infinite;
+}
+
+/* Hide scrollbars cleanly for horizontal galleries */
+.no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Silky card hover lift, diffused multi-layer drop shadow, and subtle image zoom */
+.showcase-card {
+    box-shadow:
+        0 4px 12px -2px rgba(0, 0, 0, 0.14),
+        0 2px 6px -2px rgba(0, 0, 0, 0.06);
+    transition:
+        transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, box-shadow;
+}
+
+.showcase-card:hover {
+    transform: translate3d(0, -6px, 0);
+    box-shadow:
+        0 22px 42px -14px rgba(0, 0, 0, 0.16),
+        0 10px 20px -8px rgba(0, 0, 0, 0.08);
+}
+
+.showcase-card img {
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.showcase-card:hover img {
+    transform: scale(1.03);
+}
+
+/* Framed Lightbox Modal (slick open/close & frame switch transitions) */
+.lightbox-backdrop {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lightbox-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-frame {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.96);
+    transition:
+        opacity 400ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 440ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+.lightbox-backdrop.is-open .lightbox-frame {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+.lightbox-stage-img {
+    transition:
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 260ms ease;
+    transform-origin: center center;
+}
+
+.lightbox-stage-img.is-zoomed {
+    transform: scale(1.55);
+    cursor: zoom-out;
+}
+
+.lightbox-stage-img.is-switching {
+    opacity: 0;
+    transform: scale(0.97);
+}
+
+body.lightbox-open {
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .section-arrive,
+    .animate-gentle-float,
+    .loader-fade-up,
+    .loader-text-rise,
+    .loader-spin-slow,
+    .loader-ring-bob,
+    .loader-orb,
+    .loader-orb-delayed {
+        animation: none !important;
+    }
+
+    #page-loader {
+        display: none !important;
+    }
+}

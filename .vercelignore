@@ -1,0 +1,9 @@
+/vendor
+/node_modules
+/bootstrap/cache/*.php
+/public/hot
+.env
+.env.*
+/storage/logs/*
+/database/*.sqlite
+/tests
